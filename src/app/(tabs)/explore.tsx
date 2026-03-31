@@ -111,9 +111,10 @@ const Explore: React.FC<any> = () => {
 
   const renderEmptyComponent = useCallback(() => <ListEmptyView />, []);
 
+  const { hasNextPage, isFetchingNextPage, fetchNextPage } = postsQuery;
   const onEndReached = useCallback(() => {
-    if (postsQuery.hasNextPage && !postsQuery.isFetchingNextPage) postsQuery.fetchNextPage();
-  }, [postsQuery]);
+    if (hasNextPage && !isFetchingNextPage) fetchNextPage();
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   if (postsQuery.data) {
     return (

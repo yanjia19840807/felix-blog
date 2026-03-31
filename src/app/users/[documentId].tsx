@@ -322,7 +322,7 @@ const UserDetail: React.FC<any> = () => {
     isPublished: true,
   });
 
-  const userPhotosQuery = useFetchUserPhotos({ userDocumentId });
+  const userPhotosQuery = useFetchUserPhotos(userDocumentId);
 
   const scrollOffset = useSharedValue(0);
   const scrollHandler = useAnimatedScrollHandler((event) => {

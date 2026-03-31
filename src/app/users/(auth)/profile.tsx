@@ -220,7 +220,7 @@ const Profile: React.FC<any> = () => {
     isPublished,
   });
 
-  const userPhotosQuery = useFetchUserPhotos({ userDocumentId }, selectedIndex === 1);
+  const userPhotosQuery = useFetchUserPhotos(userDocumentId, selectedIndex === 1);
 
   const scrollOffset = useSharedValue(0);
   const scrollHandler = useAnimatedScrollHandler((event) => {

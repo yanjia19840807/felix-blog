@@ -1,7 +1,7 @@
 import { fetchUserPhotos } from '@/api';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
-export const useFetchUserPhotos = ({ userDocumentId }, enabled: boolean = true) => {
+export const useFetchUserPhotos = (userDocumentId, enabled: boolean = true) => {
   return useInfiniteQuery({
     queryKey: ['posts', 'list', { userDocumentId }, 'album'],
     enabled: !!userDocumentId && enabled,

@@ -25,6 +25,7 @@ import { useFetchPostComments } from '../api/use-fetch-post-comments';
 import {
   useCommentActions,
   useCommentPostDocumentId,
+  useIsSheetExpanded,
   useReplyComment,
   useSelectComment,
 } from '../store';
@@ -50,7 +51,7 @@ export const CommentSheet = memo(function CommentSheet() {
   const postDocumentId = useCommentPostDocumentId();
   const selectComment = useSelectComment();
   const replyComment = useReplyComment();
-  const { setReplyComment, addExpandCommentDocumentId } = useCommentActions();
+  const { setReplyComment, addExpandCommentDocumentId, onSheetAnimate } = useCommentActions();
   const {
     commentSheetRef,
     commentMenuSheetRef,
@@ -60,9 +61,8 @@ export const CommentSheet = memo(function CommentSheet() {
     closeMenu,
     openSub,
     closeSub,
-    isExpanded,
-    onMenuChange,
   } = useCommentSheetContext();
+  const isExpanded = useIsSheetExpanded();
   const { user } = useAuth();
   const inputRef = useRef<any>(null);
   const snapPoints = useMemo(() => ['95%'], []);
@@ -232,9 +232,13 @@ export const CommentSheet = memo(function CommentSheet() {
               close={close}
               closeMenu={closeMenu}
               openSub={openSub}
-              onChange={onMenuChange}
+              onChange={onSheetAnimate}
             />
-            <CommentSubSheet subRef={commentSubSheetRef} onChange={onMenuChange} close={closeSub} />
+            <CommentSubSheet
+              subRef={commentSubSheetRef}
+              onChange={onSheetAnimate}
+              close={closeSub}
+            />
           </>
         )}
       </VStack>

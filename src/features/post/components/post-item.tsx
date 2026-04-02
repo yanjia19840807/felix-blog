@@ -1,4 +1,3 @@
-import { useCarousel } from '@/components/carousel-provider';
 import { ImageryItem } from '@/components/imagery-item';
 import { ImageryList } from '@/components/imagery-list';
 import { Card } from '@/components/ui/card';
@@ -15,23 +14,30 @@ import { TagList } from '@/features/tag/components/tag-list';
 import { UserAvatar } from '@/features/user/components/user-avatar';
 import { UserAvatars } from '@/features/user/components/user-avatars';
 import { formatDistance } from '@/utils/date';
+import { toAttachmetItem } from '@/utils/file';
 import { useRouter } from 'expo-router';
 import _ from 'lodash';
 import { MapPin } from 'lucide-react-native';
-import React, { memo, useCallback, useMemo } from 'react';
+import React, { memo, useCallback } from 'react';
 import { Pressable } from 'react-native';
+import { useCarouselActions } from '../store/use-carousel-store';
 import { LikeButton } from './like-button';
 
 export const PostItem: React.FC<any> = memo(function PostItem({ item }) {
+  console.log('@@ Render PostItem');
   const router = useRouter();
   const { coverWidth, coverHeight } = useCoverDimensions(14, 10.5);
-  const { onOpen } = useCarousel();
+  const { onOpen } = useCarouselActions();
+
   const { setCommentPostDocumentId } = useCommentActions();
 
-  const carouselData = useMemo(
-    () => _.concat(item.cover ? item.cover : [], item.images || []),
-    [item.cover, item.images],
+  const images = _.map(item.attachments || [], (attachment) =>
+    toAttachmetItem(attachment, item.attachmentExtras),
   );
+
+  const cover = item.cover ? toAttachmetItem(item.cover, item.attachmentExtras) : undefined;
+
+  const carouselData = _.concat(cover ? cover : [], images || []);
 
   const onCoverPress = useCallback(() => {
     onOpen(carouselData, 0);
@@ -39,9 +45,9 @@ export const PostItem: React.FC<any> = memo(function PostItem({ item }) {
 
   const onImagePress = useCallback(
     (index: number) => {
-      onOpen(carouselData, index + (item.cover ? 1 : 0));
+      onOpen(carouselData, index + (cover ? 1 : 0));
     },
-    [onOpen, carouselData, item.cover],
+    [onOpen, carouselData, cover],
   );
 
   const onItemPress = useCallback(() => {
@@ -76,12 +82,12 @@ export const PostItem: React.FC<any> = memo(function PostItem({ item }) {
             </HStack>
             <TagList tags={item.tags || []}></TagList>
           </VStack>
-          {item.cover && (
+          {cover && (
             <ImageryItem
-              uri={item.cover.thumbnail}
-              cacheKey={item.cover.name}
-              mime={item.cover.mime}
-              alt={item.cover.alternativeText || item.cover.name}
+              uri={cover.thumbnail}
+              cacheKey={cover.name}
+              mime={cover.mime}
+              alt={cover.alternativeText || cover.name}
               style={{
                 width: coverWidth,
                 height: coverHeight,
@@ -91,7 +97,7 @@ export const PostItem: React.FC<any> = memo(function PostItem({ item }) {
             />
           )}
           <Text numberOfLines={5}>{item.content}</Text>
-          <ImageryList value={item.images} onPress={onImagePress} />
+          <ImageryList value={images} onPress={onImagePress} />
           <HStack className="h-6 items-center justify-between">
             <LikeButton post={item} />
             <UserAvatars users={item.likedByUsers} />

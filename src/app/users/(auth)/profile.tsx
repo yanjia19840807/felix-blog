@@ -1,4 +1,3 @@
-import { CarouselProvider } from '@/components/carousel-provider';
 import CarouselViewer from '@/components/carousel-viewer';
 import { Button, ButtonIcon, ButtonText } from '@/components/ui/button';
 import { Divider } from '@/components/ui/divider';
@@ -270,10 +269,10 @@ const Profile: React.FC<any> = () => {
 
 const ProfileLayout: React.FC<any> = () => {
   return (
-    <CarouselProvider>
+    <>
       <Profile />
       <CarouselViewer />
-    </CarouselProvider>
+    </>
   );
 };
 

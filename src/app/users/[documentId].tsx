@@ -1,4 +1,3 @@
-import { CarouselProvider } from '@/components/carousel-provider';
 import CarouselViewer from '@/components/carousel-viewer';
 import { Button, ButtonIcon, ButtonText } from '@/components/ui/button';
 import { HStack } from '@/components/ui/hstack';
@@ -397,10 +396,10 @@ const UserDetail: React.FC<any> = () => {
 
 const UserDetailLayout: React.FC = () => {
   return (
-    <CarouselProvider>
+    <>
       <UserDetail />
       <CarouselViewer />
-    </CarouselProvider>
+    </>
   );
 };
 

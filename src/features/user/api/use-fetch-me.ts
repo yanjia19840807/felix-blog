@@ -18,6 +18,7 @@ export const createFetchMeQuery = (accessToken) => {
 };
 
 export const useFetchMe = (accessToken, isTokenLoaded = true) => {
+  console.log('@@ useFetchMe');
   return useQuery({
     ...createFetchMeQuery(accessToken),
     enabled: isTokenLoaded,

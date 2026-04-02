@@ -1,4 +1,3 @@
-import { useCarousel } from '@/components/carousel-provider';
 import { ImageryItem } from '@/components/imagery-item';
 import { ListEmptyView } from '@/components/list-empty-view';
 import { fileFullUrl, imageFormat } from '@/utils/file';
@@ -7,11 +6,12 @@ import _ from 'lodash';
 import React, { useCallback, useMemo } from 'react';
 import { RefreshControl, useWindowDimensions, View } from 'react-native';
 import Animated from 'react-native-reanimated';
+import { useCarouselActions } from '../store/use-carousel-store';
 
 const AnimatedMasonryFlashList = Animated.createAnimatedComponent(MasonryFlashList);
 
 const PhotoListView: React.FC<any> = ({ query, userDocumentId, headerHeight, scrollHandler }) => {
-  const { onOpen } = useCarousel();
+  const { onOpen } = useCarouselActions();
   const numColumns = 3;
   const { width: windowWidth } = useWindowDimensions();
 
@@ -68,11 +68,11 @@ const PhotoListView: React.FC<any> = ({ query, userDocumentId, headerHeight, scr
 
   const renderEmptyComponent = useCallback(() => <ListEmptyView />, []);
 
-  const onEndReached = useCallback(() => {
+  const onEndReached = () => {
     if (query.hasNextPage && !query.isFetchingNextPage) {
       query.fetchNextPage();
     }
-  }, [query.hasNextPage, query.isFetchingNextPage, query.fetchNextPage]);
+  };
 
   return (
     <AnimatedMasonryFlashList

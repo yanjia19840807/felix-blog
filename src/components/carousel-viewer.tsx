@@ -1,5 +1,6 @@
 import { Portal } from '@/components/ui/portal';
 import { VStack } from '@/components/ui/vstack';
+import { useCarousel, useCarouselActions } from '@/features/post/store/use-carousel-store';
 import _ from 'lodash';
 import React from 'react';
 import { useWindowDimensions } from 'react-native';
@@ -7,7 +8,6 @@ import { remapProps } from 'react-native-css-interop';
 import { useSharedValue } from 'react-native-reanimated';
 import Carousel, { ICarouselInstance, Pagination } from 'react-native-reanimated-carousel';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useCarousel } from './carousel-provider';
 import ImageViewer from './image-viewer';
 import VideoViewer from './video-viewer';
 
@@ -18,7 +18,11 @@ const CustomPagination = remapProps(Pagination.Basic, {
 });
 
 const CarouselViewer: React.FC<any> = () => {
-  const { data, isOpen, index, onClose } = useCarousel();
+  const { onClose } = useCarouselActions();
+  const data = useCarousel((state) => state.data);
+  const isOpen = useCarousel((state) => state.isOpen);
+  const index = useCarousel((state) => state.index);
+
   const progress = useSharedValue<number>(index);
   const ref = React.useRef<ICarouselInstance>(null);
   const insets = useSafeAreaInsets();

@@ -21,6 +21,7 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }: any) => {
+  console.log('@@ Render AuthProvider');
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [isTokenLoaded, setIsTokenLoaded] = useState(false);
   const { isLoading, isError, data } = useFetchMe(accessToken, isTokenLoaded);

@@ -4,10 +4,11 @@ import { useAuth } from '@/features/auth/components/auth-provider';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import _ from 'lodash';
 import { Heart } from 'lucide-react-native';
-import React, { memo, useCallback } from 'react';
+import React, { memo } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 export const LikeButton = memo(function LikeButton({ post, className, size = 'sm' }: any) {
+  console.log('@@ Render LikeButton');
   const { user } = useAuth();
   const userDocumentId = user?.documentId;
   const queryClient = useQueryClient();
@@ -40,7 +41,7 @@ export const LikeButton = memo(function LikeButton({ post, className, size = 'sm
     },
   });
 
-  const onLikedButtonPress = useCallback(() => {
+  const onLikedButtonPress = () => {
     if (user) {
       const userDocumentIds = likedByMe
         ? _.map(
@@ -56,7 +57,7 @@ export const LikeButton = memo(function LikeButton({ post, className, size = 'sm
         },
       });
     }
-  }, [user, likedByMe, post.likedByUsers, post.documentId, userDocumentId, mutate]);
+  };
 
   return (
     <Button onPress={onLikedButtonPress} variant="link">

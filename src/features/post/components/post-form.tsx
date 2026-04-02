@@ -1,4 +1,3 @@
-import { useCarousel } from '@/components/carousel-provider';
 import { ImageryGrid } from '@/components/imagery-grid';
 import { ImageryPicker } from '@/components/imagery-picker';
 import { PositionPicker } from '@/components/position-picker';
@@ -11,6 +10,7 @@ import { Controller } from 'react-hook-form';
 import { KeyboardAwareScrollView, KeyboardStickyView } from 'react-native-keyboard-controller';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { z } from 'zod';
+import { useCarouselActions } from '../store/use-carousel-store';
 import { CoverPicker } from './cover-picker';
 import { MAX_CHARS, PostContentInput } from './post-content-input';
 import { PostTitleInput } from './post-title-input';
@@ -43,7 +43,7 @@ export const postSchema = z.object({
 
 const PostForm: React.FC<any> = ({ form }) => {
   const insets = useSafeAreaInsets();
-  const { onOpen } = useCarousel();
+  const { onOpen } = useCarouselActions();
 
   const {
     control,

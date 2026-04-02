@@ -1,4 +1,3 @@
-import { CarouselProvider } from '@/components/carousel-provider';
 import CarouselViewer from '@/components/carousel-viewer';
 import { MainHeader } from '@/components/header';
 import { ListEmptyView } from '@/components/list-empty-view';
@@ -18,11 +17,10 @@ import { Banner } from '@/features/post/components/banner';
 import { PostItem } from '@/features/post/components/post-item';
 import { PostListSkeleton } from '@/features/post/components/post-list-skeleton';
 import { FollowingsBar } from '@/features/user/components/followings-bar';
-import { toAttachmetItem } from '@/utils/file';
 import { useRouter } from 'expo-router';
 import _ from 'lodash';
 import { Filter, Search } from 'lucide-react-native';
-import React, { memo, useCallback, useMemo } from 'react';
+import React, { memo } from 'react';
 import { FlatList, RefreshControl, TouchableOpacity } from 'react-native';
 
 const HomeHeader: React.FC<any> = memo(function HomeHeader() {
@@ -62,6 +60,7 @@ const HomeHeader: React.FC<any> = memo(function HomeHeader() {
 });
 
 const PostList: React.FC<any> = () => {
+  console.log('@@ Render PostList');
   const router = useRouter();
   const { user } = useAuth();
 
@@ -70,33 +69,17 @@ const PostList: React.FC<any> = () => {
     isPublished: true,
   });
 
-  const posts: any = useMemo(
-    () =>
-      _.map(
-        _.flatMap(postsQuery.data?.pages, (page: any) => page.data),
-        (item: any) => ({
-          ...item,
-          images: _.map(item.attachments || [], (attachment: any) =>
-            toAttachmetItem(attachment, item.attachmentExtras),
-          ),
-          cover: item.cover ? toAttachmetItem(item.cover, item.attachmentExtras) : undefined,
-        }),
-      ),
-    [postsQuery.data?.pages],
-  );
+  const posts = _.flatMap(postsQuery.data?.pages, (page: any) => page.data);
 
-  const renderListHeader = useCallback((props: any) => <HomeHeader {...props}></HomeHeader>, []);
+  const renderListHeader = (props: any) => <HomeHeader {...props}></HomeHeader>;
 
-  const renderItem = useCallback(
-    ({ item, index }: any) => <PostItem item={item} index={index} />,
-    [],
-  );
+  const renderItem = ({ item, index }: any) => <PostItem item={item} index={index} />;
 
-  const renderEmptyComponent = useCallback(() => <ListEmptyView />, []);
+  const renderEmptyComponent = () => <ListEmptyView />;
 
-  const onEndReached = useCallback(() => {
+  const onEndReached = () => {
     if (postsQuery.hasNextPage && !postsQuery.isFetchingNextPage) postsQuery.fetchNextPage();
-  }, [postsQuery]);
+  };
 
   if (postsQuery.data) {
     return (
@@ -136,13 +119,13 @@ const PostList: React.FC<any> = () => {
 
 const HomeLayout: React.FC<any> = () => {
   return (
-    <CarouselProvider>
+    <>
       <CommentSheetProvider>
         <PostList />
         <CommentSheet />
       </CommentSheetProvider>
       <CarouselViewer />
-    </CarouselProvider>
+    </>
   );
 };
 

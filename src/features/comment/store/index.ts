@@ -7,6 +7,7 @@ interface State {
   expandedCommentDocumentIds: any[];
   replyComment: any;
   selectComment: any;
+  isSheetExpanded: boolean;
 }
 
 interface Actions {
@@ -15,6 +16,7 @@ interface Actions {
   setSelectComment: (replyComment: any) => void;
   addExpandCommentDocumentId: (commentDocumentId: string) => void;
   removeExpandCommentDocumentId: (commentDocumentId: string) => void;
+  onSheetAnimate: (fromIndex: number, toIndex: number) => void;
 }
 
 const initialState: State = {
@@ -22,6 +24,7 @@ const initialState: State = {
   expandedCommentDocumentIds: [],
   replyComment: undefined,
   selectComment: undefined,
+  isSheetExpanded: false,
 };
 
 export const useCommentStore = create<State & { actions: Actions }>()(
@@ -54,6 +57,11 @@ export const useCommentStore = create<State & { actions: Actions }>()(
         set((state) => {
           _.pull(state.expandedCommentDocumentIds, commentDocumentId);
         }),
+
+      onSheetAnimate: (_fromIndex, toIndex) =>
+        set((state) => {
+          state.isSheetExpanded = toIndex !== -1;
+        }),
     },
   })),
 );
@@ -75,3 +83,5 @@ export const useIsCommentExpanded = (commentDocumentId) => {
 
 export const useExpandedCommentDocumentIds = () =>
   useCommentStore((state) => state.expandedCommentDocumentIds);
+
+export const useIsSheetExpanded = () => useCommentStore((state) => state.isSheetExpanded);

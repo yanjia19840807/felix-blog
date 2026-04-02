@@ -1,4 +1,3 @@
-import { CarouselProvider, useCarousel } from '@/components/carousel-provider';
 import CarouselViewer from '@/components/carousel-viewer';
 import { Button, ButtonText } from '@/components/ui/button';
 import { HStack } from '@/components/ui/hstack';
@@ -13,6 +12,7 @@ import { ChatDetailSkeleton } from '@/features/chat/components/chat-detail-skele
 import { MessageInput } from '@/features/chat/components/message-input';
 import { ReceiverItem } from '@/features/chat/components/receiver-item';
 import { SenderItem } from '@/features/chat/components/sender-item';
+import { useCarouselActions } from '@/features/post/store/use-carousel-store';
 import { UserChatAvatar } from '@/features/user/components/user-chat-avatar';
 import { toAttachmetItem } from '@/utils/file';
 import { router, Stack, useLocalSearchParams } from 'expo-router';
@@ -25,7 +25,7 @@ const ChatDetail: React.FC<any> = () => {
   const { documentId }: any = useLocalSearchParams();
   const { user: currentUser } = useAuth();
   const flatListRef = useRef<FlatList>(null);
-  const { onOpenName } = useCarousel();
+  const { onOpenName } = useCarouselActions();
   const chatQuery = useFetchChat({ documentId, userDocumentId: currentUser.documentId });
 
   const otherUser = _.find(
@@ -149,10 +149,10 @@ const ChatDetail: React.FC<any> = () => {
 
 const ChatDetailLayout: React.FC<any> = () => {
   return (
-    <CarouselProvider>
+    <>
       <ChatDetail />
       <CarouselViewer />
-    </CarouselProvider>
+    </>
   );
 };
 

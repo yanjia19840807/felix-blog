@@ -1,4 +1,3 @@
-import { CarouselProvider } from '@/components/carousel-provider';
 import CarouselViewer from '@/components/carousel-viewer';
 import PageSpinner from '@/components/page-spinner';
 import { Button, ButtonText } from '@/components/ui/button';
@@ -107,10 +106,10 @@ const PostEditPage = () => {
         }}
       />
       {(postQuery.isLoading || editMutation.isPending) && <PageSpinner />}
-      <CarouselProvider>
+      <>
         <PostForm form={form} />
         <CarouselViewer />
-      </CarouselProvider>
+      </>
     </SafeAreaView>
   );
 };

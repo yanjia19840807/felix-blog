@@ -1,4 +1,3 @@
-import { CarouselProvider, useCarousel } from '@/components/carousel-provider';
 import CarouselViewer from '@/components/carousel-viewer';
 import { ImageryItem } from '@/components/imagery-item';
 import { ImageryList } from '@/components/imagery-list';
@@ -19,6 +18,7 @@ import { PostContextMenu } from '@/features/post/components/post-context-menu';
 import { PostDetailSkeleton } from '@/features/post/components/post-detail-skeleton';
 import { PostEditMenu } from '@/features/post/components/post-edit-menu';
 import useCoverDimensions from '@/features/post/hooks/use-cover-dimensions';
+import { useCarouselActions } from '@/features/post/store/use-carousel-store';
 import { TagList } from '@/features/tag/components/tag-list';
 import { UserAvatar } from '@/features/user/components/user-avatar';
 import { formatDistance } from '@/utils/date';
@@ -33,7 +33,7 @@ const PostDetail: React.FC<any> = () => {
   const { documentId } = useLocalSearchParams();
   const { user } = useAuth();
   const router = useRouter();
-  const { onOpen } = useCarousel();
+  const { onOpen } = useCarouselActions();
   const { coverWidth, coverHeight } = useCoverDimensions(14);
   const postQuery = useFetchPost({ documentId });
 
@@ -151,13 +151,13 @@ const PostDetail: React.FC<any> = () => {
 
 const PostDetailLayout: React.FC = () => {
   return (
-    <CarouselProvider>
+    <>
       <CommentSheetProvider>
         <PostDetail />
         <CarouselViewer />
         <CommentSheet />
       </CommentSheetProvider>
-    </CarouselProvider>
+    </>
   );
 };
 

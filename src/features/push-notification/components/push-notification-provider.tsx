@@ -5,7 +5,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 import { useRouter } from 'expo-router';
-import React, { createContext, useContext, useEffect, useMemo } from 'react';
+import React, { createContext, useContext, useEffect } from 'react';
 import { useCreateExpoPushToken } from '../api/use-create-expo-push-token';
 import { createFetchExpoPushTokenQuery } from '../api/use-fetch-expo-push-token';
 import { useUpdateExpoPushToken } from '../api/use-update-expo-push-token';
@@ -40,7 +40,7 @@ export const PushNotificationProvider = ({ children }: any) => {
   const { mutate: createExpoPushToken } = useCreateExpoPushToken();
   const { requestNotificationPermissions } = useNotificationPermissions();
 
-  const registerPushNotification = React.useCallback(async () => {
+  const registerPushNotification = async () => {
     const deviceId = await getDeviceId();
 
     const pushTokenQuery = await queryClient.fetchQuery(createFetchExpoPushTokenQuery(deviceId));
@@ -52,9 +52,9 @@ export const PushNotificationProvider = ({ children }: any) => {
         user: user?.id,
       });
     }
-  }, [queryClient, updateExpoPushToken, user]);
+  };
 
-  const unRegisterPushNotification = React.useCallback(async () => {
+  const unRegisterPushNotification = async () => {
     const deviceId = await getDeviceId();
     const pushTokenQuery = await queryClient.fetchQuery(createFetchExpoPushTokenQuery(deviceId));
 
@@ -62,15 +62,12 @@ export const PushNotificationProvider = ({ children }: any) => {
       documentId: pushTokenQuery.documentId,
       user: null,
     });
-  }, [queryClient, updateExpoPushToken]);
+  };
 
-  const value = useMemo(
-    () => ({
-      registerPushNotification,
-      unRegisterPushNotification,
-    }),
-    [registerPushNotification, unRegisterPushNotification],
-  );
+  const value = {
+    registerPushNotification,
+    unRegisterPushNotification,
+  };
 
   useEffect(() => {
     const notificationListener = Notifications.addNotificationReceivedListener((notification) => {
